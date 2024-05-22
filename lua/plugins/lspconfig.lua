@@ -9,11 +9,30 @@ return {
 
     {
         'williamboman/mason-lspconfig.nvim',
+        dependencies = { 'neovim/nvim-lspconfig', 'hrsh7th/cmp-nvim-lsp' },
         config = function()
             local mason_lspconfig = require("mason-lspconfig")
             mason_lspconfig.setup({
                 ensure_installed = {"lua_ls", "rust_analyzer", "clangd", "pyright"}
             })
+              -- Enable completion triggered by <c-x><c-o>
+            --vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+            --[[]
+            require("lspconfig")[rust_anayzer].setup{
+                capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            }
+            ]]--
+        end,
+        init = function ()
+            require('mason-lspconfig').setup_handlers({ function (server)
+            local opt = {
+                capabilities = require('cmp_nvim_lsp').default_capabilities(
+                --vim.lsp.protocol.make_client_capabilities()
+                )
+
+            }
+            require('lspconfig')[server].setup(opt)
+            end })
         end,
     },
     {
@@ -35,7 +54,7 @@ return {
             }
 
             lspconfig.rust_analyzer.setup {
-                root_dir = lspconfig.util.root_pattern("Cargo.toml", "rust-project.json"),
+                root_dir = lspconfig.util.root_pattern("Cargo.toml", "rust-project.json", ".git"),
             }
             -- Mappings.
             -- See `:help vim.diagnostic.*` for documentation on any of the below functions

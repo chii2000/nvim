@@ -1,0 +1,32 @@
+return {
+  'mrcjkb/rustaceanvim',
+  version = '^4', -- Recommended
+  lazy = false, -- This plugin is already lazy
+  config = function()
+
+      vim.g.rustaceanvim = {
+       ---@type RustaceanToolsOpts
+       tools = {
+     -- ...
+       },
+       ---@type RustaceanLspClientOpts
+       server = {
+         on_attach = function(client, bufnr)
+           -- Set keybindings, etc. here.
+         end,
+         default_settings = {
+           -- rust-analyzer language server configuration
+           ['rust-analyzer'] = {
+           },
+
+         },
+         -- ...
+       },
+       ---@type RustaceanDapOpts
+       dap = {
+         -- ...
+       },
+
+     }
+ end
+}
